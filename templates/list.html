@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Lista de Tarefas</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container py-4">
+  <h1>Tarefas</h1>
+
+  <!-- Form para adicionar -->
+  <form method="post" class="mb-3">
+    {% csrf_token %}
+    <div class="input-group">
+      <input name="title" class="form-control" placeholder="Nova tarefa" maxlength="20" required autofocus>
+      <button class="btn btn-primary" type="submit" name="action" value="add">Adicionar</button>
+    </div>
+  </form>
+
+  <!-- Lista -->
+  <ul class="list-group">
+    {% for task in tasks %}
+      <li class="list-group-item d-flex justify-content-between align-items-center {% if task.completed %}list-group-item-success{% endif %}">
+        <div>
+          <strong>{{ task.title }}</strong><br>
+          <small class="text-muted">{{ task.created_at|date:"d/m/Y H:i" }}</small>
+        </div>
+
+        <div>
+          <!-- Toggle com checkbox -->
+          <form method="post" style="display:inline">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ task.id }}">
+            <input type="hidden" name="action" value="toggle">
+            <input type="checkbox" class="form-check-input"
+                  onchange="this.form.submit()" 
+                  {% if task.completed %}checked{% endif %}>
+          </form>
+
+          <!-- Excluir -->
+          <form method="post" style="display:inline" onsubmit="return confirm('Excluir tarefa?')">
+            {% csrf_token %}
+            <input type="hidden" name="id" value="{{ task.id }}">
+            <button class="btn btn-sm btn-outline-danger" type="submit" name="action" value="delete">Excluir</button>
+          </form>
+        </div>
+      </li>
+    {% empty %}
+      <li class="list-group-item">Nenhuma tarefa ainda.</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
