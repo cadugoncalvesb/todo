@@ -26,6 +26,16 @@ class TaskListView(ListView):
             except Task.DoesNotExist:
                 pass
 
+        elif action == 'edit' and task_id:
+            try:
+                new_title = request.POST.get('new_title', '').strip()
+                if new_title:
+                    t = Task.objects.get(pk=task_id)
+                    t.title = new_title
+                    t.save()
+            except Task.DoesNotExist:
+                pass
+
         elif action == 'delete' and task_id:
             Task.objects.filter(pk=task_id).delete()
 
