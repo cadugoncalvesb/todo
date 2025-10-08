@@ -44,14 +44,11 @@ source venv/bin/activate
 # 4. Instalar o Django
 pip install django
 
-# 5. Instalar as dependências
-pip install -r requirements.txt
-
-# 6. Criar migrações a partir dos modelos
+# 5. Criar migrações a partir dos modelos
 python manage.py makemigrations
 
-# 7. Aplicar as migrações no banco de dados
+# 6. Aplicar as migrações no banco de dados
 python manage.py migrate
 
-# 8. Executar o servidor
+# 7. Executar o servidor
 python manage.py runserver
