@@ -9,6 +9,9 @@ class TaskListView(ListView):
     context_object_name = 'tasks'
     ordering = ['-created_at']
 
+    def get_queryset(self):
+        return Task.objects.filter(user=self.request.user).order_by('-created_at')
+
     def post(self, request, *args, **kwargs):
         action = request.POST.get('action')
         task_id = request.POST.get('id')
@@ -16,7 +19,7 @@ class TaskListView(ListView):
         if action == 'add':
             title = request.POST.get('title', '').strip()
             if title:
-                Task.objects.create(title=title)
+                Task.objects.create(title=title, user=request.user)
 
         elif action == 'toggle' and task_id:
             try:
